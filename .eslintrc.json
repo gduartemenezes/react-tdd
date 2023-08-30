@@ -1,5 +1,14 @@
 {
-    "extends": "standard-with-typescript",
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "extends": [
+        "standard-with-typescript",
+        "plugin:react/recommended"
+    ],
+    "plugins": ["react"],
     "parserOptions": {
         "project": "./tsconfig.json"
     },
@@ -11,7 +20,9 @@
         "@typescript-eslint/promise-function-async":"off",
         "@typescript-eslint/no-useless-constructor": "off",
         "@typescript-eslint/no-misused-promises": "off",
-        "@typescript-eslint/no-unnecessary-type-assertion": "off"
+        "@typescript-eslint/no-unnecessary-type-assertion": "off",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error"
     }
 
 }
