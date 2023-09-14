@@ -117,11 +117,17 @@ describe('', () => {
   })
   test('Should call authentication only once', () => {
     const { sut, authenticationSpy } = makeSut()
-    const email = faker.internet.email()
-    const password = faker.internet.password()
-    simulateValidSubmit(sut, email, password)
-    simulateValidSubmit(sut, email, password)
+    simulateValidSubmit(sut)
+    simulateValidSubmit(sut)
 
     expect(authenticationSpy.callsCount).toBe(1)
+  })
+
+  test('Should not call authentication if form is invalid', () => {
+    const validationError = faker.lorem.lines()
+    const { sut, authenticationSpy } = makeSut({ validationError })
+    populateEmailField(sut)
+    fireEvent.submit(sut.getByTestId('login-form'))
+    expect(authenticationSpy.callsCount).toBe(0)
   })
 })
