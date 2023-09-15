@@ -4,6 +4,7 @@ import { Header, Footer, Input, FormStatus } from '@/presentation/components/'
 import Context from '@/presentation/contexts/form/form-context'
 import { Validation } from '@/presentation/protocols/validation'
 import { Authentication } from '@/domain/usecases'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   validation: Validation
@@ -25,7 +26,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
       passwordError: validation.validate('password', state.password)
     })
   }, [state.email, state.password])
-
+  const navigate = useNavigate()
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
     try {
@@ -55,7 +56,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
           <Input type="password" name="password" placeholder='Digite sua senha' id="" />
 
           <button data-testid='submit' disabled={!!state.emailError || !!state.passwordError} className={Styles.submit} type="submit">Entrar</button>
-          <span className={Styles.link}>Criar conta</span>
+          <span onClick={() => { navigate('/signup') }} data-testid="register" className={Styles.a}>Criar conta</span>
           <FormStatus />
         </form>
       </Context.Provider>
