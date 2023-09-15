@@ -6,10 +6,14 @@ import Login from './login'
 import { ValidationStub } from '@/presentation/test/mock-validation'
 import { AuthenticationSpy } from '@/presentation/test/mock-authentication'
 import { InvalidCredentialsError } from '@/domain/errors'
-
+import { RouterProvider, createMemoryRouter } from 'react-router-dom'
+import { Router } from '@remix-run/router'
+import { enableFetchMocks } from 'jest-fetch-mock'
+enableFetchMocks()
 type SutTypes = {
   sut: RenderResult
   authenticationSpy: AuthenticationSpy
+  router: Router
 }
 type SutParams = {
   validationError: string
@@ -43,8 +47,23 @@ const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   const authenticationSpy = new AuthenticationSpy()
   validationStub.errorMessage = params?.validationError
-  const sut = render(<Login validation={validationStub} authentication={authenticationSpy} />)
-  return { sut, authenticationSpy }
+
+  const routes = [
+    {
+      path: '/login',
+      element: <Login validation={validationStub} authentication={authenticationSpy} />
+    },
+    {
+      path: '/signup',
+      element: <></>
+    }
+  ]
+  const router = createMemoryRouter(routes, {
+    initialEntries: ['/login'],
+    initialIndex: 0
+  })
+  const sut = render(<RouterProvider router={router} />)
+  return { sut, authenticationSpy, router }
 }
 describe('', () => {
   afterEach(cleanup)
@@ -152,5 +171,11 @@ describe('', () => {
     simulateValidSubmit(sut)
     await waitFor(() => sut.getByTestId('login-form'))
     expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+  })
+  test('Should redirect to SignUp page', () => {
+    const { sut, router } = makeSut()
+    const register = sut.getByTestId('register')
+    fireEvent.click(register)
+    expect(router.state.location.pathname).toEqual('/signup')
   })
 })
