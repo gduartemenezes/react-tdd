@@ -56,6 +56,10 @@ const makeSut = (params?: SutParams): SutTypes => {
     {
       path: '/signup',
       element: <></>
+    },
+    {
+      path: '/',
+      element: <></>
     }
   ]
   const router = createMemoryRouter(routes, {
@@ -167,10 +171,11 @@ describe('', () => {
     expect(errorWrap.childElementCount).toBe(1)
   })
   test('Should add access token to localstorage on Authentication success', async () => {
-    const { sut, authenticationSpy } = makeSut()
+    const { sut, authenticationSpy, router } = makeSut()
     simulateValidSubmit(sut)
     await waitFor(() => sut.getByTestId('login-form'))
     expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
+    expect(router.state.location.pathname).toEqual('/')
   })
   test('Should redirect to SignUp page', () => {
     const { sut, router } = makeSut()
