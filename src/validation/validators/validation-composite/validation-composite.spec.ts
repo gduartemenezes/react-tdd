@@ -1,15 +1,16 @@
 import { FieldValidationSpy } from '@/validation/test/mock-field-validation'
 import { ValidationComposite } from '@/validation/validators/validation-composite/validation-composite'
+import { faker } from '@faker-js/faker'
 
 type SutTypes = {
   sut: ValidationComposite
   fieldValidationSpies: FieldValidationSpy[]
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (fieldName: string): SutTypes => {
   const fieldValidationSpies = [
-    new FieldValidationSpy('any_field'),
-    new FieldValidationSpy('any_field')
+    new FieldValidationSpy(fieldName),
+    new FieldValidationSpy(fieldName)
   ]
   const sut = new ValidationComposite(fieldValidationSpies)
 
@@ -21,24 +22,22 @@ const makeSut = (): SutTypes => {
 
 describe('ValidationComposite', () => {
   test('Should return error if any validation fails', () => {
-    const { sut, fieldValidationSpies } = makeSut()
-    fieldValidationSpies[0].error = new Error('first_error')
-    fieldValidationSpies[1].error = new Error('second_error')
+    const fieldName = faker.lorem.word()
+    const { sut, fieldValidationSpies } = makeSut(fieldName)
+    const firstError = faker.lorem.sentence()
+    const secondError = faker.lorem.sentence()
+    fieldValidationSpies[0].error = new Error(firstError)
+    fieldValidationSpies[1].error = new Error(secondError)
 
-    const error = sut.validate('any_field', 'any_value')
-    expect(error).toBe('first_error')
+    const error = sut.validate(fieldName, 'any_value')
+    expect(error).toBe(firstError)
   })
 
-  test('Should return error if any validation fails', () => {
-    const fieldValidationSpy = new FieldValidationSpy('any_field')
-    fieldValidationSpy.error = new Error('first_error')
-    const fieldValidationSpy2 = new FieldValidationSpy('any_field')
-    fieldValidationSpy2.error = new Error('second_error')
-    const sut = new ValidationComposite([
-      fieldValidationSpy,
-      fieldValidationSpy2
-    ])
-    const error = sut.validate('any_field', 'any_value')
-    expect(error).toBe('first_error')
+  test('Should return falsy if all validations succeed ', () => {
+    const fieldName = faker.lorem.word()
+    const { sut } = makeSut(fieldName)
+
+    const error = sut.validate(fieldName, 'any_value')
+    expect(error).toBeFalsy()
   })
 })
