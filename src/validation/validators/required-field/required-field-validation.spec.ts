@@ -5,7 +5,7 @@ import { faker } from '@faker-js/faker'
 
 const makeSut = (): RequiredFieldValidation => new RequiredFieldValidation(faker.lorem.sentence())
 
-describe('', () => {
+describe('RequiredFieldValidation', () => {
   afterEach(cleanup)
   beforeEach(() => {
     localStorage.clear()

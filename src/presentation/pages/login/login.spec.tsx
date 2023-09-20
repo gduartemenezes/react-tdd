@@ -89,7 +89,7 @@ const makeSut = (params?: SutParams): SutTypes => {
   const sut = render(<RouterProvider router={router} />)
   return { sut, authenticationSpy, router }
 }
-describe('', () => {
+describe('Login', () => {
   afterEach(cleanup)
   beforeEach(() => {
     localStorage.clear()
