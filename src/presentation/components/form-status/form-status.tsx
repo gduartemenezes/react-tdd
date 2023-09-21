@@ -1,7 +1,7 @@
 
 import React, { memo, useContext } from 'react'
 import Styles from './form-status-styles.scss'
-import { Spinner } from '../'
+import { Spinner } from '@/presentation/components/'
 import Context from '@/presentation/contexts/form/form-context'
 const FormStatus: React.FC = () => {
   const { state } = useContext(Context)

@@ -1,6 +1,6 @@
 import { cleanup } from '@testing-library/react'
 import { RequiredFieldValidation } from './required-field.validation'
-import { RequiredFieldError } from '../../errors'
+import { RequiredFieldError } from '@/validation/errors'
 import { faker } from '@faker-js/faker'
 
 const makeSut = (): RequiredFieldValidation => new RequiredFieldValidation(faker.lorem.sentence())
