@@ -1,11 +1,11 @@
-import { Login } from '@/presentation/pages'
+import { MakeLogin } from '@/main/factories/pages/login/login-factory'
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Login validation={undefined} authentication={undefined}/>}/>
+        <Route path='/login' element={<MakeLogin/>}/>
       </Routes>
     </BrowserRouter>
   )
